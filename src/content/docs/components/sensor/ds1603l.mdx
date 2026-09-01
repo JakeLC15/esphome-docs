@@ -3,46 +3,43 @@ description: "Instructions for setting up DS1603L ultrasonic sensor with ESPHome
 title: "DS1603L Ultrasonic Distance Sensor"
 ---
 
-## ds1603l
+import Figure from '@components/Figure.astro';
+import ds1603lImg from './images/ds1603l.jpg';
+import APIRef from '@components/APIRef.astro';
 
-DS1603L V1.0 Ultrasonic Sensor over UART without modification.
+
+DS1603L V1.0 Ultrasonic Sensor ([datasheet](https://www.dypcn.com/uploads/DS1603-V1.0-Datasheet.pdf)) over UART without modification.
 
 This sensor can measure ranges between 5 centimeters and 200 centimeters with a resolution of 1 millimeter.
 
-### **MINIMUM CONFIGURATION**
+Since this sensor reads every few seconds, [Sensor Filters](/components/sensor#sensor-filters) are highly recommended.
+
+To use the sensor, first set up an [UART Bus](/components/uart) with a baud rate of 9600 and connect the sensor to the specified pin.
+
+> [!NOTE]
+> These sensors read from the bottom of a tank and need to have some kind of couplant for them to work.
+> There can be no air gap between sensor and bottom of container.
+> Silicone grease is recommended and easily found at most automotive or hardware stores.
+
+<Figure
+  src={ds1603lImg}
+  alt=""
+  caption="DS1603L Ultrasonic Distance Sensor."
+  layout="constrained"
+/>
 
 ```yaml
-
-uart:
-  - id: uart_1
-    tx_pin: GPIOXX
-    rx_pin: GPIOXX
-    baud_rate: 9600
-
+# Example configuration entry
 sensor:
   - platform: ds1603l
-    uart_id: uart_1
-      name: "DS1603L Distance"
-
+    name: Distance
 ```
 
 ### Configuration variables
 
-- **name** (**Required**, string): Name your sensor.
-- **unit_of_measurement** (*Optional*, string): Level outputs mm.
-- **accuracy_decimals** (*Optional*): Set decimals output. Defaults to `0`
-- **sensor options** (*Optional*): All other options from sensor including filters.
+- All options from [Sensor](/components/sensor).
 
-> [!NOTE]
->These sensors read from the bottom of a tank and need to have some kind of couplant for them to work.
->There can be no air gap between sensor and bottom of container.
->Silicone grease is recommended and easily found at most automotive or hardware stores.
-
-![ds1603l](https://github.com/user-attachments/assets/79b79543-64df-4499-a3a5-8f55cbde69c7)
-
-[ds1603-v1_0-datasheet.pdf](https://github.com/user-attachments/files/24546581/ds1603-v1_0-datasheet.pdf)
-
-### **EXAMPLE**
+### Full Example
 
 ```yaml
 
@@ -69,3 +66,9 @@ sensor:
       - delta: 1.0
 
 ```
+
+## See Also
+
+- [Sensor Filters](/components/sensor#sensor-filters)
+- [UART Bus](/components/uart)
+- <APIRef text="ds1603l.h" path="ds1603l/ds1603l.h" />
