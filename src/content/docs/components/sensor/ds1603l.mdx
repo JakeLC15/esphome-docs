@@ -1,0 +1,71 @@
+---
+description: "Instructions for setting up DS1603L ultrasonic sensor with ESPHome"
+title: "DS1603L Ultrasonic Distance Sensor"
+---
+
+## ds1603l
+
+DS1603L V1.0 Ultrasonic Sensor over UART without modification.
+
+This sensor can measure ranges between 5 centimeters and 200 centimeters with a resolution of 1 millimeter.
+
+### **MINIMUM CONFIGURATION**
+
+```yaml
+
+uart:
+  - id: uart_1
+    tx_pin: GPIOXX
+    rx_pin: GPIOXX
+    baud_rate: 9600
+
+sensor:
+  - platform: ds1603l
+    uart_id: uart_1
+      name: "DS1603L Distance"
+
+```
+
+### Configuration variables
+
+- **name** (**Required**, string): Name your sensor.
+- **unit_of_measurement** (*Optional*, string): Level outputs mm.
+- **accuracy_decimals** (*Optional*): Set decimals output. Defaults to `0`
+- **sensor options** (*Optional*): All other options from sensor including filters.
+
+> [!NOTE]
+>These sensors read from the bottom of a tank and need to have some kind of couplant for them to work.
+>There can be no air gap between sensor and bottom of container.
+>Silicone grease is recommended and easily found at most automotive or hardware stores.
+
+![ds1603l](https://github.com/user-attachments/assets/79b79543-64df-4499-a3a5-8f55cbde69c7)
+
+[ds1603-v1_0-datasheet.pdf](https://github.com/user-attachments/files/24546581/ds1603-v1_0-datasheet.pdf)
+
+### **EXAMPLE**
+
+```yaml
+
+uart:              #required for sensor
+  - id: uart_1
+    tx_pin: GPIOXX
+    rx_pin: GPIOXX
+    baud_rate: 9600
+
+##############
+### Sensor ###
+##############
+
+sensor:
+  - platform: ds1603l
+    uart_id: uart_1                    # must match uart config
+    state_class: measurement           # default
+    device_class: distance             # default
+    name: "DS1603L Distance"           # name for HA
+    unit_of_measurement: "mm"          # sensor outputs mm, can be set to anything but will need filtering to convert
+    icon: mdi:arrow-expand-vertical    # icon for HA
+    filters:                           # some filters I found useful
+      - filter_out: nan
+      - delta: 1.0
+
+```
